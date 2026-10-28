@@ -270,10 +270,9 @@ function builtFlowOf({ result }: { result: unknown }): BuiltFlow | null {
     if (isNil(structured) || !Array.isArray(structured['flowSteps']) || typeof structured['flowId'] !== 'string') {
         return null
     }
-    const name = typeof structured['displayName'] === 'string' ? structured['displayName'] : structured['flowName']
     return {
         flowId: structured['flowId'],
-        name: typeof name === 'string' ? name : 'Automation',
+        name: typeof structured['displayName'] === 'string' ? structured['displayName'] : 'Automation',
         steps: structured['flowSteps'].flatMap((step) => isObject(step) && typeof step['displayName'] === 'string'
             ? [{ label: readableLabel(step['displayName']), done: step['state'] === 'ok' }]
             : []),
