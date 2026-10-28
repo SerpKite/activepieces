@@ -801,6 +801,9 @@ function buildToolSet({ ctx, eventEmitter, log, taintState, mcpToolSet, webTools
         ? agentWorkerTools.createAgentSurfaceTools({ executeTool: executeCrossProjectTool, taintState, eventEmitter: toolEventEmitter, waitForApproval, onGateOpened: storePendingGate })
         : {}
     const thinkingTools = agentWorkerTools.createThinkingTools()
+    const resultTools = agentWorkerTools.createResultTools({
+        readFile: async (fileId) => (await ctx.apiClient.readAgentFile({ platformId, conversationId, fileId, ...spreadIfDefined('projectId', projectState.projectId ?? undefined) })).data,
+    })
     const buildPlanTools = agentWorkerTools.createBuildPlanTools({
         eventEmitter: toolEventEmitter,
         getProjectId: () => projectState.projectId,
@@ -866,7 +869,7 @@ function buildToolSet({ ctx, eventEmitter, log, taintState, mcpToolSet, webTools
     return agentToolPolicy.selectToolsForSource({
         source,
         groups: {
-            local: localTools,
+            local: { ...localTools, ...resultTools },
             display: displayTools,
             crossProject: crossProjectTools,
             web: webTools,
