@@ -43,7 +43,7 @@ describe('agentToolSkills', () => {
     })
 
     it('sends the tools the model tends to guess directly, so the provider checks their arguments', () => {
-        for (const tool of ['ap_show_connection_picker', 'ap_show_connection_required', 'ap_discover_action_auth', 'ap_show_questions', 'ap_get_piece_props', 'ap_resolve_property_options', 'ap_resolve_property_chain']) {
+        for (const tool of ['ap_show_connection_picker', 'ap_show_connection_required', 'ap_discover_action_auth', 'ap_show_questions', 'ap_get_piece_props', 'ap_resolve_property_chain']) {
             expect(CORE_TOOL_NAMES.CHAT).toContain(tool)
         }
         expect(CORE_TOOL_NAMES.AGENT).toContain('ap_show_connection_picker')
@@ -69,6 +69,13 @@ describe('agentToolSkills', () => {
 
     it('ships deep research with the web research guide, so its schema arrives with the guide', () => {
         expect(agentToolSkills.findSkill({ name: 'web_and_media' })?.toolNames).toContain('ap_deep_research')
+    })
+
+    it('keeps the option resolver and the batch edit tool in flow building, and email in one-time tasks', () => {
+        expect(agentToolSkills.findSkill({ name: 'flow_building' })?.toolNames).toEqual(expect.arrayContaining(['ap_resolve_property_options', 'ap_apply_flow_operations']))
+        expect(agentToolSkills.findSkill({ name: 'one_time_task' })?.toolNames).toContain('ap_send_email')
+        expect(agentToolSkills.findSkill({ name: 'tables' })?.entersBuildPhase).toBe(false)
+        expect(agentToolSkills.findSkill({ name: 'discovery' })?.toolNames).toContain('ap_explore_data')
     })
 
     it('renders a sorted one-line catalog', () => {
