@@ -1248,6 +1248,9 @@
       "@activepieces/piece-serp-api": [
         "packages/pieces/community/serp-api/src/index.ts"
       ],
+      "@activepieces/piece-serpkite": [
+        "packages/pieces/community/serpkite/src/index.ts"
+      ],
       "@activepieces/piece-serpstat": [
         "packages/pieces/community/serpstat/src/index.ts"
       ],

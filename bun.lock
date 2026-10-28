@@ -8402,6 +8402,19 @@
         "tslib": "2.6.2",
       },
     },
+    "packages/pieces/community/serpkite": {
+      "name": "@activepieces/piece-serpkite",
+      "version": "0.0.1",
+      "dependencies": {
+        "@activepieces/core-piece-types": "workspace:*",
+        "@activepieces/core-utils": "workspace:*",
+        "@activepieces/pieces-common": "workspace:*",
+        "@activepieces/pieces-framework": "workspace:*",
+      },
+      "devDependencies": {
+        "tslib": "2.6.2",
+      },
+    },
     "packages/pieces/community/serpstat": {
       "name": "@activepieces/piece-serpstat",
       "version": "0.2.0",
@@ -12688,6 +12701,8 @@
     "@activepieces/piece-senja": ["@activepieces/piece-senja@workspace:packages/pieces/community/senja"],
 
     "@activepieces/piece-serp-api": ["@activepieces/piece-serp-api@workspace:packages/pieces/community/serp-api"],
+
+    "@activepieces/piece-serpkite": ["@activepieces/piece-serpkite@workspace:packages/pieces/community/serpkite"],
 
     "@activepieces/piece-serpstat": ["@activepieces/piece-serpstat@workspace:packages/pieces/community/serpstat"],
 
