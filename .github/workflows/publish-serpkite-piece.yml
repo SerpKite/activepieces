@@ -1,0 +1,56 @@
+# Publishes packages/pieces/community/serpkite to npm as @serpkite/piece-serpkite
+# (npm trusted publishing: no token; provenance is attached automatically).
+name: Publish SerpKite piece
+
+on:
+  push:
+    tags: ["piece-serpkite-v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - run: bun install --ignore-scripts --linker hoisted
+      - run: npx -y turbo@2.9.14 run bundle --filter=@activepieces/piece-serpkite
+        env:
+          TURBO_TELEMETRY_DISABLED: "1"
+      - name: Prepare the npm package
+        working-directory: packages/pieces/community/serpkite
+        run: |
+          version="${GITHUB_REF_NAME#piece-serpkite-v}"
+          node - "$version" <<'JS'
+          const fs = require("fs");
+          const version = process.argv[2];
+          const src = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          if (src.version !== version) throw new Error(`tag ${version} != package.json ${src.version}`);
+          const p = JSON.parse(fs.readFileSync("dist/package.json", "utf8"));
+          Object.assign(p, {
+            name: "@serpkite/piece-serpkite",
+            version,
+            description: "SerpKite for Activepieces: Google search, Maps, webpages, cited answers and AI assistant answers (ChatGPT, Gemini, Copilot Search, Google AI Mode, Brave).",
+            homepage: "https://serpkite.com/integrations/activepieces",
+            repository: { type: "git", url: "git+https://github.com/SerpKite/activepieces.git", directory: "packages/pieces/community/serpkite" },
+            license: "MIT",
+            keywords: ["activepieces", "serpkite", "google-search", "serp-api", "ai-agents"],
+            author: "SerpKite <support@serpkite.com>",
+            files: [...new Set([...(p.files || []), "README.md", "LICENSE"])],
+          });
+          fs.writeFileSync("dist/package.json", JSON.stringify(p, null, 2) + "\n");
+          JS
+          cp README.md LICENSE dist/
+          node -e "const m=require('./dist/src/index.js');const p=Object.values(m).find(v=>v&&v.displayName);if(!p||Object.keys(p._actions||{}).length<20)throw new Error('piece did not load');console.log(p.displayName,Object.keys(p._actions).length,'actions')"
+      - run: npm install -g npm@11
+      - run: npm publish --access public
+        working-directory: packages/pieces/community/serpkite/dist

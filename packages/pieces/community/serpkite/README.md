@@ -1,32 +1,17 @@
-# SerpKite
+# SerpKite piece for Activepieces
 
-[SerpKite](https://serpkite.com) is a Google search API built for AI agents. This piece runs Google searches, reads webpages as Markdown, writes cited answers and asks public AI assistants (ChatGPT, Gemini, Copilot Search, Google AI Mode, Brave) what they answer.
+Google search, Maps, webpages, cited answers and what AI assistants (ChatGPT, Gemini, Copilot Search, Google AI Mode, Brave) answer, in [Activepieces](https://www.activepieces.com) flows. Built for [SerpKite](https://serpkite.com), a Google SERP API for AI agents.
+
+## Install
+
+Self-hosted Activepieces: **Settings → My Pieces → Install Piece**, choose npm and enter `@serpkite/piece-serpkite`. Then add the **SerpKite** piece to a flow and connect it with your API key from [app.serpkite.com](https://app.serpkite.com/keys). Setup guide: [serpkite.com/integrations/activepieces](https://serpkite.com/integrations/activepieces).
 
 ## Actions
 
-- **Search Google**: organic results, answer box, knowledge graph, People Also Ask and related searches. Optional: read the top pages, add a cited answer.
-- **Search Google News / Images / Videos / Shopping / Scholar / Patents**, **Get Google Autocomplete**
-- **Search Google Maps** and **Get Place Details** (opening hours, phone, website, rating)
-- **Fetch Webpage**: one URL (HTML or PDF) as clean Markdown with metadata
-- **Extract Pages**: up to 20 URLs, with query-ranked passages, AI summaries or JSON matching your schema
-- **Map a Website**: list a site's URLs, optionally ranked by search words
-- **Answer with Citations**: a short answer from live Google results with numbered sources
-- **Ask ChatGPT / Gemini / Copilot Search / Google AI Mode / Brave AI**: the assistant's answer as a logged-out visitor, with cited sources, products and, with *Track Brands or Domains*, whether each brand or domain is mentioned or cited
-- **Start Site Crawl / Get Crawl Result**, **Start Deep Research / Get Research Result**: long-running tasks; poll with the Get action or pass a webhook URL
-- **Get Account Balance** (free) and **Custom API Call** (any `https://api.serpkite.com` endpoint)
+Search Google (web, News, Images, Videos, Shopping, Maps, Scholar, Patents, Autocomplete), Get Place Details, Fetch Webpage, Extract Pages (highlights, summary, JSON by schema), Map a Website, Answer with Citations, Ask ChatGPT / Gemini / Copilot Search / Google AI Mode / Brave AI, Start Site Crawl / Get Crawl Result, Start Deep Research / Get Research Result, Get Account Balance, and a Custom API Call.
 
-Every action can output JSON (fields to map) or Markdown (compact text for an AI step), where the API offers both.
+Each action is billed like the API call it makes ([pricing](https://serpkite.com/pricing)); failed and empty requests are not billed.
 
-## Response times
+## Releasing
 
-Searches and pages answer in a few seconds. AI assistants take longer: Brave AI 1–10 s, Gemini 5–30 s, ChatGPT 10–30 s, Google AI Mode 5–45 s, Copilot Search 15–40 s. The assistant actions wait up to 120 s per request and retry once to collect an answer that was still being finished, so they fit in the default 600 s step limit.
-
-## Authentication
-
-1. Sign up at [serpkite.com](https://serpkite.com) (no card needed).
-2. Create a key under **API keys** in the [dashboard](https://app.serpkite.com).
-3. Paste the key (`skt_live_…`) into the connection. Checking it is free.
-
-## Pricing
-
-Prices per request are on [serpkite.com/pricing](https://serpkite.com/pricing). Failed and empty requests are not billed.
+The npm package is built from this folder with the Activepieces tooling and published by `.github/workflows/publish-serpkite-piece.yml` (npm trusted publishing, with provenance) when a `piece-serpkite-v<version>` tag is pushed. Bump `version` in `package.json` first; the tag must match it.
